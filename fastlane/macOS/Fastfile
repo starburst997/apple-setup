@@ -24,13 +24,17 @@ platform :mac do
       )
     end
 
+    # Use readonly mode on non-macOS systems to skip verification
+    readonly = ENV['MATCH_READONLY'] == 'true'
+
     if ENV['GENERATE_APPSTORE'] == 'true'
       match(
         type: "appstore",
         additional_cert_types: "mac_installer_distribution",
         storage_mode: "git",
         git_url: "git@github.com:#{match_org}/#{match_repo}.git",
-        app_identifier: ENV["MAC_BUNDLE_ID"]
+        app_identifier: ENV["MAC_BUNDLE_ID"],
+        readonly: readonly
       )
     end
 
@@ -39,7 +43,8 @@ platform :mac do
         type: "developer_id",
         storage_mode: "git",
         git_url: "git@github.com:#{match_org}/#{match_repo}.git",
-        app_identifier: ENV["MAC_BUNDLE_ID"]
+        app_identifier: ENV["MAC_BUNDLE_ID"],
+        readonly: readonly
       )
 
       if ENV['GENERATE_PKG'] == 'true'
@@ -48,7 +53,8 @@ platform :mac do
           additional_cert_types: "developer_id_installer",
           storage_mode: "git",
           git_url: "git@github.com:#{match_org}/#{match_repo}.git",
-          app_identifier: ENV["MAC_BUNDLE_ID"]
+          app_identifier: ENV["MAC_BUNDLE_ID"],
+          readonly: readonly
         )
       end
     end

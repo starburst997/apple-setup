@@ -23,11 +23,15 @@ platform :ios do
       )
     end
 
+    # Use readonly mode on non-macOS systems to skip verification
+    readonly = ENV['MATCH_READONLY'] == 'true'
+
     match(
       type: "appstore",
       storage_mode: "git",
       git_url: "git@github.com:#{match_org}/#{match_repo}.git",
-      app_identifier: ENV["IOS_BUNDLE_ID"]
+      app_identifier: ENV["IOS_BUNDLE_ID"],
+      readonly: readonly
     )
   end
 end

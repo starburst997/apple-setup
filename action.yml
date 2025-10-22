@@ -1,101 +1,101 @@
-name: 'Apple Code Signing Setup'
-description: 'Sets up Apple code signing certificates and provisioning profiles using fastlane match'
-author: 'Your Name'
+name: "Apple Code Signing Setup"
+description: "Sets up Apple code signing certificates and provisioning profiles using fastlane match"
+author: "Your Name"
 
 branding:
-  icon: 'lock'
-  color: 'gray-dark'
+  icon: "lock"
+  color: "gray-dark"
 
 inputs:
   use_session:
-    description: 'Use Apple ID session authentication instead of App Store Connect API'
+    description: "Use Apple ID session authentication instead of App Store Connect API"
     required: false
-    default: 'false'
+    default: "false"
   generate_macos:
-    description: 'Generate macOS certificates and profiles'
+    description: "Generate macOS certificates and profiles"
     required: false
-    default: 'false'
+    default: "false"
   generate_ios:
-    description: 'Generate iOS certificates and profiles'
+    description: "Generate iOS certificates and profiles"
     required: false
-    default: 'false'
+    default: "false"
   generate_appstore:
-    description: 'Generate App Store certificates (macOS only)'
+    description: "Generate App Store certificates (macOS only)"
     required: false
-    default: 'false'
+    default: "false"
   generate_developer_id:
-    description: 'Generate Developer ID certificates (macOS only)'
+    description: "Generate Developer ID certificates (macOS only)"
     required: false
-    default: 'false'
+    default: "false"
   generate_pkg:
-    description: 'Generate PKG installer certificates (macOS only)'
+    description: "Generate PKG installer certificates (macOS only)"
     required: false
-    default: 'false'
+    default: "false"
 
   # Required secrets (passed as inputs in composite actions)
   gh_pat:
-    description: 'GitHub Personal Access Token for accessing match repository'
+    description: "GitHub Personal Access Token for accessing match repository"
     required: true
   match_repository:
-    description: 'Git repository for storing certificates (format: org/repo)'
+    description: "Git repository for storing certificates (format: org/repo)"
     required: true
   match_password:
-    description: 'Password to encrypt/decrypt certificates'
+    description: "Password to encrypt/decrypt certificates"
     required: true
   match_deploy_key:
-    description: 'SSH deploy key for match repository (optional - will be generated if not provided)'
+    description: "SSH deploy key for match repository (optional - will be generated if not provided)"
     required: false
-    default: ''
+    default: ""
 
   # Apple credentials (required based on use_session)
   fastlane_user:
-    description: 'Apple ID email (required if use_session is true)'
+    description: "Apple ID email (required if use_session is true)"
     required: false
-    default: ''
+    default: ""
   fastlane_password:
-    description: 'Apple ID password (required if use_session is true)'
+    description: "Apple ID password (required if use_session is true)"
     required: false
-    default: ''
+    default: ""
   fastlane_session:
-    description: 'Fastlane session cookie (required if use_session is true)'
+    description: "Fastlane session cookie (required if use_session is true)"
     required: false
-    default: ''
+    default: ""
 
   # App Store Connect API (required if use_session is false)
   appstore_issuer_id:
-    description: 'App Store Connect API issuer ID (required if use_session is false)'
+    description: "App Store Connect API issuer ID (required if use_session is false)"
     required: false
-    default: ''
+    default: ""
   appstore_key_id:
-    description: 'App Store Connect API key ID (required if use_session is false)'
+    description: "App Store Connect API key ID (required if use_session is false)"
     required: false
-    default: ''
+    default: ""
   appstore_p8:
-    description: 'App Store Connect API private key content (required if use_session is false)'
+    description: "App Store Connect API private key content (required if use_session is false)"
     required: false
-    default: ''
+    default: ""
 
   # Bundle IDs
   mac_bundle_id:
-    description: 'macOS application bundle identifier (required if generate_macos is true)'
+    description: "macOS application bundle identifier (required if generate_macos is true)"
     required: false
-    default: ''
+    default: ""
   ios_bundle_id:
-    description: 'iOS application bundle identifier (required if generate_ios is true)'
+    description: "iOS application bundle identifier (required if generate_ios is true)"
     required: false
-    default: ''
+    default: ""
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Setup Ruby
-      uses: ruby/setup-ruby@v1
+    - uses: starburst997/setup-ruby@jd
       with:
-        ruby-version: '3.2'
+        ruby-version: 3.2
         bundler-cache: true
+        add-platform: true
         working-directory: ${{ github.action_path }}
 
     - name: Fastlane Init and Sync Certificates
@@ -140,3 +140,4 @@ runs:
         GENERATE_MACOS: ${{ inputs.generate_macos }}
         GENERATE_PKG: ${{ inputs.generate_pkg }}
         USE_SESSION: ${{ inputs.use_session }}
+        #MATCH_READONLY: true
