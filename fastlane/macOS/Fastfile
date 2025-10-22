@@ -1,3 +1,5 @@
+require_relative "spaceship_patch"
+
 org, repo = (ENV["GITHUB_REPOSITORY"]||"").split("/")
 match_org, match_repo = (ENV["MATCH_REPOSITORY"]||"").split("/")
 
