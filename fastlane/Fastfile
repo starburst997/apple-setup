@@ -1,0 +1,3 @@
+# Main Fastfile that imports platform-specific configurations
+import "./iOS/Fastfile"
+import "./macOS/Fastfile"
