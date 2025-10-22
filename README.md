@@ -24,11 +24,11 @@ A GitHub composite action to automatically set up Apple code signing certificate
 This setup allows you to sign iOS apps for TestFlight and App Store distribution:
 
 ```yaml
-name: Build iOS App
-on: [push]
-
+name: Apple Setup
+on:
+  workflow_dispatch:
 jobs:
-  setup-codesigning:
+  apple-setup:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Apple Code Signing
