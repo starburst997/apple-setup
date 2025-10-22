@@ -29,7 +29,7 @@ on:
   workflow_dispatch:
 jobs:
   apple-setup:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Setup Apple Code Signing
         uses: starburst997/apple-setup@v1
