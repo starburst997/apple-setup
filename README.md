@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Apple Code Signing
-        uses: your-username/apple-setup@v1
+        uses: starburst997/apple-setup@v1
         with:
           generate_ios: true
           gh_pat: ${{ secrets.GH_PAT }}
@@ -62,7 +62,7 @@ For distributing macOS apps outside the Mac App Store (direct download, DMG, etc
 
 ```yaml
 - name: Setup Apple Code Signing
-  uses: your-username/apple-setup@v1
+  uses: starburst997/apple-setup@v1
   with:
     generate_macos: true
     generate_developer_id: true
@@ -79,7 +79,7 @@ For distributing macOS apps outside the Mac App Store (direct download, DMG, etc
 
 ```yaml
 - name: Setup Apple Code Signing
-  uses: your-username/apple-setup@v1
+  uses: starburst997/apple-setup@v1
   with:
     generate_macos: true
     generate_appstore: true
@@ -98,7 +98,7 @@ For distributing macOS apps as installer packages:
 
 ```yaml
 - name: Setup Apple Code Signing
-  uses: your-username/apple-setup@v1
+  uses: starburst997/apple-setup@v1
   with:
     generate_macos: true
     generate_developer_id: true
