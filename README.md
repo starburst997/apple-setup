@@ -41,7 +41,7 @@ jobs:
           appstore_issuer_id: ${{ secrets.APPSTORE_ISSUER_ID }}
           appstore_key_id: ${{ secrets.APPSTORE_KEY_ID }}
           appstore_p8: ${{ secrets.APPSTORE_P8 }}
-          ios_bundle_id: ${{ secrets.IOS_BUNDLE_ID }}
+          ios_bundle_id: "com.company.appname"
 ```
 
 **Required Secrets for this scenario:**
@@ -52,7 +52,8 @@ jobs:
 - `APPSTORE_ISSUER_ID` - App Store Connect API Issuer ID
 - `APPSTORE_KEY_ID` - App Store Connect API Key ID
 - `APPSTORE_P8` - App Store Connect API private key (.p8 file contents)
-- `IOS_BUNDLE_ID` - Your iOS app bundle identifier (e.g., 'com.company.appname')
+
+**Note:** Bundle ID (`com.company.appname`) is provided inline in the workflow, not as a secret.
 
 ## Other Usage Examples
 
@@ -72,7 +73,7 @@ For distributing macOS apps outside the Mac App Store (direct download, DMG, etc
     appstore_issuer_id: ${{ secrets.APPSTORE_ISSUER_ID }}
     appstore_key_id: ${{ secrets.APPSTORE_KEY_ID }}
     appstore_p8: ${{ secrets.APPSTORE_P8 }}
-    mac_bundle_id: ${{ secrets.MAC_BUNDLE_ID }}
+    mac_bundle_id: "com.company.appname"
 ```
 
 ### macOS App Store Distribution
@@ -89,7 +90,7 @@ For distributing macOS apps outside the Mac App Store (direct download, DMG, etc
     appstore_issuer_id: ${{ secrets.APPSTORE_ISSUER_ID }}
     appstore_key_id: ${{ secrets.APPSTORE_KEY_ID }}
     appstore_p8: ${{ secrets.APPSTORE_P8 }}
-    mac_bundle_id: ${{ secrets.MAC_BUNDLE_ID }}
+    mac_bundle_id: "com.company.appname"
 ```
 
 ### macOS with PKG Installer
@@ -109,7 +110,7 @@ For distributing macOS apps as installer packages:
     appstore_issuer_id: ${{ secrets.APPSTORE_ISSUER_ID }}
     appstore_key_id: ${{ secrets.APPSTORE_KEY_ID }}
     appstore_p8: ${{ secrets.APPSTORE_P8 }}
-    mac_bundle_id: ${{ secrets.MAC_BUNDLE_ID }}
+    mac_bundle_id: "com.company.appname"
 ```
 
 ## Inputs
@@ -256,20 +257,13 @@ App Store Connect API Key is the recommended way to authenticate with Apple serv
 
 **Secret to save:** `GH_PAT` - Your generated GitHub Personal Access Token
 
-### Step 6: Configure Bundle ID
-
-**Secret to save:**
-
-- `MAC_BUNDLE_ID` - Your macOS app bundle identifier (e.g., `com.company.appname`)
-- `IOS_BUNDLE_ID` - Your iOS app bundle identifier (only if building iOS apps)
-
-### Step 7: Add All Secrets to GitHub
+### Step 6: Add All Secrets to GitHub
 
 Go to your GitHub repository → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
 
 Add each of these secrets:
 
-**For iOS App Store Distribution (most common scenario):**
+**Required secrets (same for iOS and macOS):**
 
 - ✅ `GH_PAT` - GitHub Personal Access Token
 - ✅ `MATCH_REPOSITORY` - Format: `org/repo` (e.g., `myorg/ios-certificates`)
@@ -277,17 +271,13 @@ Add each of these secrets:
 - ✅ `APPSTORE_ISSUER_ID` - From App Store Connect API
 - ✅ `APPSTORE_KEY_ID` - From App Store Connect API
 - ✅ `APPSTORE_P8` - Entire `.p8` file contents
-- ✅ `IOS_BUNDLE_ID` - Your iOS bundle ID (e.g., `com.company.appname`)
-
-**For macOS (if needed):**
-
-- `MAC_BUNDLE_ID` - Your macOS bundle ID (only if building macOS apps)
 
 **Important Notes:**
 
 - For `APPSTORE_P8`: Copy the **entire contents** of the `.p8` file, including `-----BEGIN PRIVATE KEY-----` and `-----END PRIVATE KEY-----`
 - For `MATCH_PASSWORD`: Use a strong random password and **save it in your password manager** for reuse in other projects
-- These secrets (except bundle IDs) can be reused across multiple projects
+- These secrets can be reused across multiple projects
+- **Bundle IDs** are provided inline in your workflow YAML (e.g., `ios_bundle_id: "com.company.appname"`), not as secrets
 
 ## How It Works
 
