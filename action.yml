@@ -42,6 +42,10 @@ inputs:
   match_password:
     description: 'Password to encrypt/decrypt certificates'
     required: true
+  match_deploy_key:
+    description: 'SSH deploy key for match repository (optional - will be generated if not provided)'
+    required: false
+    default: ''
 
   # Apple credentials (required based on use_session)
   fastlane_user:
@@ -98,11 +102,21 @@ runs:
       shell: bash
       working-directory: ${{ github.action_path }}
       run: |
-        bundle exec fastlane ios init_ci
-
+        # Setup SSH for match repository
         eval "$(ssh-agent -s)"
-        ssh-add - <<< "$(cat MATCH_DEPLOY_KEY)"
 
+        if [[ -n "$MATCH_DEPLOY_KEY" ]]; then
+          # Use provided deploy key
+          echo "Using provided MATCH_DEPLOY_KEY"
+          ssh-add - <<< "$MATCH_DEPLOY_KEY"
+        else
+          # Generate deploy key using fastlane plugin
+          echo "Generating deploy key with fastlane init_ci"
+          bundle exec fastlane ios init_ci
+          ssh-add - <<< "$(cat MATCH_DEPLOY_KEY)"
+        fi
+
+        # Sync certificates
         [[ $GENERATE_IOS == true ]] && bundle exec fastlane ios sync_certificates
         [[ $GENERATE_MACOS == true ]] && bundle exec fastlane mac sync_certificates
         echo "Finished!"
@@ -119,6 +133,7 @@ runs:
         GITHUB_REPOSITORY: ${{ github.repository }}
         MATCH_REPOSITORY: ${{ inputs.match_repository }}
         MATCH_PASSWORD: ${{ inputs.match_password }}
+        MATCH_DEPLOY_KEY: ${{ inputs.match_deploy_key }}
         GENERATE_DEVELOPER_ID: ${{ inputs.generate_developer_id }}
         GENERATE_APPSTORE: ${{ inputs.generate_appstore }}
         GENERATE_IOS: ${{ inputs.generate_ios }}
