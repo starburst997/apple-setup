@@ -46,6 +46,10 @@ inputs:
     description: "SSH deploy key for match repository (optional - will be generated if not provided)"
     required: false
     default: ""
+  match_readonly:
+    description: "Use readonly mode to skip Apple Developer Portal verification (recommended for existing certificates)"
+    required: false
+    default: "false"
 
   # Apple credentials (required based on use_session)
   fastlane_user:
@@ -140,4 +144,4 @@ runs:
         GENERATE_MACOS: ${{ inputs.generate_macos }}
         GENERATE_PKG: ${{ inputs.generate_pkg }}
         USE_SESSION: ${{ inputs.use_session }}
-        #MATCH_READONLY: true
+        MATCH_READONLY: ${{ inputs.match_readonly }}
