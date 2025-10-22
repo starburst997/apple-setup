@@ -27,6 +27,8 @@ jobs:
       - name: Tag Version
         id: version
         uses: starburst997/auto-version@v1
+        with:
+          update-major-minor: true
 
       - name: Generate changelog and create release
         uses: starburst997/commits-logs@v1
