@@ -92,8 +92,23 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+    - name: Configure Git
+      shell: bash
+      run: |
+        # Only set git config if not already configured
+        if [ -z "$(git config user.name)" ]; then
+          git config user.name "${{ inputs.git-user-name }}"
+          echo "✅ Set git user.name to ${{ inputs.git-user-name }}"
+        else
+          echo "ℹ️  Git user.name already set to: $(git config user.name)"
+        fi
+
+        if [ -z "$(git config user.email)" ]; then
+          git config user.email "${{ inputs.git-user-email }}"
+          echo "✅ Set git user.email to ${{ inputs.git-user-email }}"
+        else
+          echo "ℹ️  Git user.email already set to: $(git config user.email)"
+        fi
 
     - uses: starburst997/setup-ruby@jd
       with:
