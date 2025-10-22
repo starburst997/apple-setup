@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apple Setup - GitHub Action for Code Signing</title>
+    <meta
+      name="description"
+      content="A GitHub composite action to automatically set up Apple code signing certificates and provisioning profiles using fastlane match. Simplify iOS and macOS CI/CD."
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.6;
+        color: #24292f;
+        background: #ffffff;
+        min-height: 100vh;
+      }
+
+      .hero-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100vh;
+        background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 50%, #fff8e1 100%);
+        z-index: -1;
+      }
+
+      .hero-accent {
+        position: absolute;
+        width: 800px;
+        height: 800px;
+        background: radial-gradient(circle, rgba(0, 122, 255, 0.08) 0%, transparent 70%);
+        top: -400px;
+        left: 50%;
+        transform: translateX(-50%);
+        pointer-events: none;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      header {
+        padding: 2rem 0;
+        text-align: center;
+      }
+
+      .hero {
+        padding: 4rem 0 6rem;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #007aff, #5856d6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .tagline {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+        color: #6e6e73;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 0.875rem 2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+      }
+
+      .btn-primary {
+        background: #007aff;
+        color: #ffffff;
+        border: 1px solid #007aff;
+      }
+
+      .btn-primary:hover {
+        background: #0051d5;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 30px rgba(0, 122, 255, 0.3);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #007aff;
+        border: 2px solid #007aff;
+      }
+
+      .btn-secondary:hover {
+        background: #007aff;
+        color: #ffffff;
+      }
+
+      .features-section {
+        background: #ffffff;
+        border-top: 1px solid #d2d2d7;
+        padding: 5rem 0;
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3rem;
+        margin-top: 3rem;
+      }
+
+      .feature {
+        text-align: center;
+        padding: 1.5rem;
+      }
+
+      .feature-icon {
+        width: 60px;
+        height: 60px;
+        background: #f5f5f7;
+        border: 1px solid #d2d2d7;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 1.8rem;
+      }
+
+      .feature h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: #1d1d1f;
+      }
+
+      .feature p {
+        color: #6e6e73;
+        line-height: 1.7;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        color: #1d1d1f;
+        margin-bottom: 1rem;
+      }
+
+      .section-subtitle {
+        text-align: center;
+        color: #6e6e73;
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .usage-section {
+        padding: 4rem 0;
+        background: #f5f5f7;
+        border-top: 1px solid #d2d2d7;
+        border-bottom: 1px solid #d2d2d7;
+      }
+
+      .code-examples {
+        max-width: 900px;
+        margin: 3rem auto 0;
+      }
+
+      .code-example {
+        background: #1d1d1f;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        overflow-x: auto;
+      }
+
+      .code-example-title {
+        color: #ffffff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      .code-example pre {
+        color: #d4d4d4;
+        font-family: "Monaco", "Courier New", monospace;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        overflow-x: auto;
+      }
+
+      .code-example code {
+        color: #d4d4d4;
+      }
+
+      /* Syntax highlighting */
+      .keyword { color: #c586c0; }
+      .string { color: #ce9178; }
+      .comment { color: #6a9955; }
+      .property { color: #9cdcfe; }
+      .value { color: #4ec9b0; }
+      .variable { color: #569cd6; }
+
+      .platforms-section {
+        padding: 4rem 0;
+        background: #ffffff;
+      }
+
+      .platform-cards {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        margin-top: 3rem;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .platform-card {
+        background: #f5f5f7;
+        border: 1px solid #d2d2d7;
+        border-radius: 15px;
+        padding: 2rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .platform-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .platform-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #1d1d1f;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .platform-card ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .platform-card li {
+        padding: 0.5rem 0;
+        color: #6e6e73;
+        padding-left: 1.5rem;
+        position: relative;
+      }
+
+      .platform-card li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #34c759;
+        font-weight: bold;
+      }
+
+      footer {
+        background: #1d1d1f;
+        padding: 3rem 0;
+        text-align: center;
+        color: #a1a1a6;
+      }
+
+      footer a {
+        color: #007aff;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      footer a:hover {
+        color: #0051d5;
+        text-decoration: underline;
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.5rem;
+        }
+
+        .tagline {
+          font-size: 1.2rem;
+        }
+
+        .features {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        .platform-cards {
+          grid-template-columns: 1fr;
+        }
+
+        .cta-buttons {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero-background">
+      <div class="hero-accent"></div>
+    </div>
+
+    <header>
+      <div class="container">
+        <nav>
+          <a
+            href="https://github.com/starburst997/apple-setup"
+            class="btn btn-secondary"
+          >
+            View on GitHub →
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="container">
+        <h1>Apple Setup</h1>
+        <p class="tagline">
+          GitHub composite action to automatically set up Apple code signing
+          certificates and provisioning profiles using fastlane match.
+          Simplify your iOS and macOS CI/CD pipeline.
+        </p>
+        <div class="cta-buttons">
+          <a
+            href="https://github.com/starburst997/apple-setup"
+            class="btn btn-primary"
+          >
+            📦 Get Started
+          </a>
+          <a
+            href="https://github.com/starburst997/apple-setup#readme"
+            class="btn btn-secondary"
+          >
+            📖 Documentation
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section">
+      <div class="container">
+        <h2 class="section-title">Why Apple Setup?</h2>
+        <p class="section-subtitle">
+          Automated certificate management without the complexity
+        </p>
+
+        <div class="features">
+          <div class="feature">
+            <div class="feature-icon">🔐</div>
+            <h3>Automated Certificates</h3>
+            <p>
+              Automatically sync or generate code signing certificates and
+              provisioning profiles using fastlane match.
+            </p>
+          </div>
+
+          <div class="feature">
+            <div class="feature-icon">📱</div>
+            <h3>Multi-Platform</h3>
+            <p>
+              Support for both iOS and macOS with App Store, Developer ID,
+              and PKG installer certificates.
+            </p>
+          </div>
+
+          <div class="feature">
+            <div class="feature-icon">⚡</div>
+            <h3>CI/CD Ready</h3>
+            <p>
+              Works seamlessly in GitHub Actions with no local fastlane
+              files needed in your repository.
+            </p>
+          </div>
+
+          <div class="feature">
+            <div class="feature-icon">🔒</div>
+            <h3>Secure Storage</h3>
+            <p>
+              Certificates stored encrypted in a private Git repository,
+              accessible across your entire team.
+            </p>
+          </div>
+
+          <div class="feature">
+            <div class="feature-icon">🚀</div>
+            <h3>Zero Configuration</h3>
+            <p>
+              All fastlane files included in the action - just configure
+              your secrets and you're ready to go.
+            </p>
+          </div>
+
+          <div class="feature">
+            <div class="feature-icon">🔄</div>
+            <h3>Reusable</h3>
+            <p>
+              Use the same action across multiple projects. Secrets can be
+              shared and reused organization-wide.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="usage-section">
+      <div class="container">
+        <h2 class="section-title">Quick Start</h2>
+        <p class="section-subtitle">
+          Get up and running in minutes with these simple examples
+        </p>
+
+        <div class="code-examples">
+          <div class="code-example">
+            <div class="code-example-title">iOS App Store Distribution</div>
+            <pre><code><span class="comment"># Setup Apple code signing for iOS</span>
+<span class="keyword">-</span> <span class="property">name</span><span class="keyword">:</span> Setup Apple Code Signing
+  <span class="property">uses</span><span class="keyword">:</span> starburst997/apple-setup@v1
+  <span class="property">with</span><span class="keyword">:</span>
+    <span class="property">generate_ios</span><span class="keyword">:</span> <span class="value">true</span>
+    <span class="property">gh_pat</span><span class="keyword">:</span> <span class="variable">${{ secrets.GH_PAT }}</span>
+    <span class="property">match_repository</span><span class="keyword">:</span> <span class="string">"your-org/certificates-repo"</span>
+    <span class="property">match_password</span><span class="keyword">:</span> <span class="variable">${{ secrets.MATCH_PASSWORD }}</span>
+    <span class="property">appstore_issuer_id</span><span class="keyword">:</span> <span class="variable">${{ secrets.APPSTORE_ISSUER_ID }}</span>
+    <span class="property">appstore_key_id</span><span class="keyword">:</span> <span class="variable">${{ secrets.APPSTORE_KEY_ID }}</span>
+    <span class="property">appstore_p8</span><span class="keyword">:</span> <span class="variable">${{ secrets.APPSTORE_P8 }}</span>
+    <span class="property">ios_bundle_id</span><span class="keyword">:</span> <span class="string">"com.company.appname"</span></code></pre>
+          </div>
+
+          <div class="code-example">
+            <div class="code-example-title">macOS Developer ID Distribution</div>
+            <pre><code><span class="comment"># Setup Apple code signing for macOS</span>
+<span class="keyword">-</span> <span class="property">name</span><span class="keyword">:</span> Setup Apple Code Signing
+  <span class="property">uses</span><span class="keyword">:</span> starburst997/apple-setup@v1
+  <span class="property">with</span><span class="keyword">:</span>
+    <span class="property">generate_macos</span><span class="keyword">:</span> <span class="value">true</span>
+    <span class="property">generate_developer_id</span><span class="keyword">:</span> <span class="value">true</span>
+    <span class="property">gh_pat</span><span class="keyword">:</span> <span class="variable">${{ secrets.GH_PAT }}</span>
+    <span class="property">match_repository</span><span class="keyword">:</span> <span class="string">"your-org/certificates-repo"</span>
+    <span class="property">match_password</span><span class="keyword">:</span> <span class="variable">${{ secrets.MATCH_PASSWORD }}</span>
+    <span class="property">appstore_issuer_id</span><span class="keyword">:</span> <span class="variable">${{ secrets.APPSTORE_ISSUER_ID }}</span>
+    <span class="property">appstore_key_id</span><span class="keyword">:</span> <span class="variable">${{ secrets.APPSTORE_KEY_ID }}</span>
+    <span class="property">appstore_p8</span><span class="keyword">:</span> <span class="variable">${{ secrets.APPSTORE_P8 }}</span>
+    <span class="property">mac_bundle_id</span><span class="keyword">:</span> <span class="string">"com.company.appname"</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="platforms-section">
+      <div class="container">
+        <h2 class="section-title">Supported Platforms</h2>
+        <p class="section-subtitle">
+          Comprehensive support for all Apple distribution methods
+        </p>
+
+        <div class="platform-cards">
+          <div class="platform-card">
+            <h3>📱 iOS</h3>
+            <ul>
+              <li>App Store Distribution</li>
+              <li>TestFlight Beta Testing</li>
+              <li>Automatic certificate generation</li>
+              <li>Profile management</li>
+            </ul>
+          </div>
+
+          <div class="platform-card">
+            <h3>💻 macOS</h3>
+            <ul>
+              <li>App Store Distribution</li>
+              <li>Developer ID for Direct Distribution</li>
+              <li>PKG Installer Certificates</li>
+              <li>Notarization Ready</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p>
+          <a href="https://github.com/starburst997/apple-setup">GitHub</a> •
+          <a href="https://github.com/starburst997/apple-setup/issues">Issues</a> •
+          <a href="https://github.com/starburst997/apple-setup/releases">Releases</a> •
+          <a href="https://github.com/starburst997/apple-setup#readme">Documentation</a>
+        </p>
+        <p style="margin-top: 1rem; color: #6e6e73;">
+          Made with 🍎 for iOS and macOS developers
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
