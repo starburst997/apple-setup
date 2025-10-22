@@ -70,6 +70,7 @@ For distributing macOS apps outside the Mac App Store (direct download, DMG, etc
     gh_pat: ${{ secrets.GH_PAT }}
     match_repository: "your-org/certificates-repo"
     match_password: ${{ secrets.MATCH_PASSWORD }}
+    match_deploy_key: ${{ secrets.MATCH_DEPLOY_KEY }}
     appstore_issuer_id: ${{ secrets.APPSTORE_ISSUER_ID }}
     appstore_key_id: ${{ secrets.APPSTORE_KEY_ID }}
     appstore_p8: ${{ secrets.APPSTORE_P8 }}
@@ -87,6 +88,7 @@ For distributing macOS apps outside the Mac App Store (direct download, DMG, etc
     gh_pat: ${{ secrets.GH_PAT }}
     match_repository: "your-org/certificates-repo"
     match_password: ${{ secrets.MATCH_PASSWORD }}
+    match_deploy_key: ${{ secrets.MATCH_DEPLOY_KEY }}
     appstore_issuer_id: ${{ secrets.APPSTORE_ISSUER_ID }}
     appstore_key_id: ${{ secrets.APPSTORE_KEY_ID }}
     appstore_p8: ${{ secrets.APPSTORE_P8 }}
@@ -107,6 +109,7 @@ For distributing macOS apps as installer packages:
     gh_pat: ${{ secrets.GH_PAT }}
     match_repository: "your-org/certificates-repo"
     match_password: ${{ secrets.MATCH_PASSWORD }}
+    match_deploy_key: ${{ secrets.MATCH_DEPLOY_KEY }}
     appstore_issuer_id: ${{ secrets.APPSTORE_ISSUER_ID }}
     appstore_key_id: ${{ secrets.APPSTORE_KEY_ID }}
     appstore_p8: ${{ secrets.APPSTORE_P8 }}

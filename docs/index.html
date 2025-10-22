@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -16,8 +16,7 @@
       }
 
       body {
-        font-family:
-          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           "Helvetica Neue", Arial, sans-serif;
         line-height: 1.6;
         color: #24292f;
@@ -31,7 +30,12 @@
         left: 0;
         right: 0;
         height: 100vh;
-        background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 50%, #fff8e1 100%);
+        background: linear-gradient(
+          135deg,
+          #e3f2fd 0%,
+          #f3e5f5 50%,
+          #fff8e1 100%
+        );
         z-index: -1;
       }
 
@@ -39,7 +43,11 @@
         position: absolute;
         width: 800px;
         height: 800px;
-        background: radial-gradient(circle, rgba(0, 122, 255, 0.08) 0%, transparent 70%);
+        background: radial-gradient(
+          circle,
+          rgba(0, 122, 255, 0.08) 0%,
+          transparent 70%
+        );
         top: -400px;
         left: 50%;
         transform: translateX(-50%);
@@ -219,12 +227,24 @@
       }
 
       /* Syntax highlighting */
-      .keyword { color: #c586c0; }
-      .string { color: #ce9178; }
-      .comment { color: #6a9955; }
-      .property { color: #9cdcfe; }
-      .value { color: #4ec9b0; }
-      .variable { color: #569cd6; }
+      .keyword {
+        color: #c586c0;
+      }
+      .string {
+        color: #ce9178;
+      }
+      .comment {
+        color: #6a9955;
+      }
+      .property {
+        color: #9cdcfe;
+      }
+      .value {
+        color: #4ec9b0;
+      }
+      .variable {
+        color: #569cd6;
+      }
 
       .platforms-section {
         padding: 4rem 0;
@@ -348,8 +368,8 @@
         <h1>Apple Setup</h1>
         <p class="tagline">
           GitHub composite action to automatically set up Apple code signing
-          certificates and provisioning profiles using fastlane match.
-          Simplify your iOS and macOS CI/CD pipeline.
+          certificates and provisioning profiles using fastlane match. Simplify
+          your iOS and macOS CI/CD pipeline.
         </p>
         <div class="cta-buttons">
           <a
@@ -389,8 +409,8 @@
             <div class="feature-icon">📱</div>
             <h3>Multi-Platform</h3>
             <p>
-              Support for both iOS and macOS with App Store, Developer ID,
-              and PKG installer certificates.
+              Support for both iOS and macOS with App Store, Developer ID, and
+              PKG installer certificates.
             </p>
           </div>
 
@@ -398,8 +418,8 @@
             <div class="feature-icon">⚡</div>
             <h3>CI/CD Ready</h3>
             <p>
-              Works seamlessly in GitHub Actions with no local fastlane
-              files needed in your repository.
+              Works seamlessly in GitHub Actions with no local fastlane files
+              needed in your repository.
             </p>
           </div>
 
@@ -416,8 +436,8 @@
             <div class="feature-icon">🚀</div>
             <h3>Zero Configuration</h3>
             <p>
-              All fastlane files included in the action - just configure
-              your secrets and you're ready to go.
+              All fastlane files included in the action - just configure your
+              secrets and you're ready to go.
             </p>
           </div>
 
@@ -451,6 +471,7 @@
     <span class="property">gh_pat</span><span class="keyword">:</span> <span class="variable">${{ secrets.GH_PAT }}</span>
     <span class="property">match_repository</span><span class="keyword">:</span> <span class="string">"your-org/certificates-repo"</span>
     <span class="property">match_password</span><span class="keyword">:</span> <span class="variable">${{ secrets.MATCH_PASSWORD }}</span>
+    <span class="property">match_deploy_key</span><span class="keyword">:</span> <span class="variable">${{ secrets.MATCH_DEPLOY_KEY }}</span>
     <span class="property">appstore_issuer_id</span><span class="keyword">:</span> <span class="variable">${{ secrets.APPSTORE_ISSUER_ID }}</span>
     <span class="property">appstore_key_id</span><span class="keyword">:</span> <span class="variable">${{ secrets.APPSTORE_KEY_ID }}</span>
     <span class="property">appstore_p8</span><span class="keyword">:</span> <span class="variable">${{ secrets.APPSTORE_P8 }}</span>
@@ -458,7 +479,9 @@
           </div>
 
           <div class="code-example">
-            <div class="code-example-title">macOS Developer ID Distribution</div>
+            <div class="code-example-title">
+              macOS Developer ID Distribution
+            </div>
             <pre><code><span class="comment"># Setup Apple code signing for macOS</span>
 <span class="keyword">-</span> <span class="property">name</span><span class="keyword">:</span> Setup Apple Code Signing
   <span class="property">uses</span><span class="keyword">:</span> starburst997/apple-setup@v1
@@ -466,8 +489,9 @@
     <span class="property">generate_macos</span><span class="keyword">:</span> <span class="value">true</span>
     <span class="property">generate_developer_id</span><span class="keyword">:</span> <span class="value">true</span>
     <span class="property">gh_pat</span><span class="keyword">:</span> <span class="variable">${{ secrets.GH_PAT }}</span>
-    <span class="property">match_repository</span><span class="keyword">:</span> <span class="string">"your-org/certificates-repo"</span>
-    <span class="property">match_password</span><span class="keyword">:</span> <span class="variable">${{ secrets.MATCH_PASSWORD }}</span>
+      <span class="property">match_repository</span><span class="keyword">:</span> <span class="string">"your-org/certificates-repo"</span>
+      <span class="property">match_password</span><span class="keyword">:</span> <span class="variable">${{ secrets.MATCH_PASSWORD }}</span>
+      <span class="property">match_deploy_key</span><span class="keyword">:</span> <span class="variable">${{ secrets.MATCH_DEPLOY_KEY }}</span>
     <span class="property">appstore_issuer_id</span><span class="keyword">:</span> <span class="variable">${{ secrets.APPSTORE_ISSUER_ID }}</span>
     <span class="property">appstore_key_id</span><span class="keyword">:</span> <span class="variable">${{ secrets.APPSTORE_KEY_ID }}</span>
     <span class="property">appstore_p8</span><span class="keyword">:</span> <span class="variable">${{ secrets.APPSTORE_P8 }}</span>
@@ -512,11 +536,19 @@
       <div class="container">
         <p>
           <a href="https://github.com/starburst997/apple-setup">GitHub</a> •
-          <a href="https://github.com/starburst997/apple-setup/issues">Issues</a> •
-          <a href="https://github.com/starburst997/apple-setup/releases">Releases</a> •
-          <a href="https://github.com/starburst997/apple-setup#readme">Documentation</a>
+          <a href="https://github.com/starburst997/apple-setup/issues"
+            >Issues</a
+          >
+          •
+          <a href="https://github.com/starburst997/apple-setup/releases"
+            >Releases</a
+          >
+          •
+          <a href="https://github.com/starburst997/apple-setup#readme"
+            >Documentation</a
+          >
         </p>
-        <p style="margin-top: 1rem; color: #6e6e73;">
+        <p style="margin-top: 1rem; color: #6e6e73">
           Made with 🍎 for iOS and macOS developers
         </p>
       </div>
